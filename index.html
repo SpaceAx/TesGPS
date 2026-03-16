@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GPS Permission Test</title>
+
+<style>
+body{
+font-family:Arial, sans-serif;
+background:#0f172a;
+color:white;
+text-align:center;
+padding:40px;
+}
+
+button{
+padding:12px 20px;
+font-size:16px;
+border:none;
+border-radius:8px;
+background:#38bdf8;
+color:black;
+cursor:pointer;
+margin-top:20px;
+}
+
+button:hover{
+background:#0ea5e9;
+}
+
+#result{
+margin-top:20px;
+font-size:16px;
+}
+</style>
+</head>
+
+<body>
+
+<h2>Testing Akses GPS</h2>
+<p>Website ini akan meminta akses lokasi GPS.</p>
+
+<button onclick="requestGPS()">Minta Akses GPS</button>
+
+<div id="result"></div>
+
+<script>
+
+function requestGPS(){
+
+if(!navigator.geolocation){
+document.getElementById("result").innerHTML="Browser tidak mendukung GPS.";
+return;
+}
+
+navigator.geolocation.getCurrentPosition(
+function(position){
+
+let lat = position.coords.latitude;
+let lon = position.coords.longitude;
+let acc = position.coords.accuracy;
+
+document.getElementById("result").innerHTML=
+"GPS diizinkan ✅<br><br>"+
+"Latitude: "+lat+"<br>"+
+"Longitude: "+lon+"<br>"+
+"Akurasi: "+acc+" meter";
+
+},
+
+function(error){
+
+let pesan="";
+
+if(error.code==1){
+pesan="❌ Akses GPS ditolak.<br>Tekan tombol untuk meminta izin lagi.";
+}
+
+if(error.code==2){
+pesan="⚠️ Lokasi tidak tersedia.";
+}
+
+if(error.code==3){
+pesan="⏱️ Permintaan lokasi timeout.";
+}
+
+document.getElementById("result").innerHTML=pesan;
+
+}
+
+);
+
+}
+
+window.onload=requestGPS;
+
+</script>
+
+</body>
+</html>
